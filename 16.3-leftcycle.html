@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>16.3生命周期</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      class LifeCycle extends React.Component {
+        constructor(props) {
+          console.log('[挂载1]进入constructor')
+          super(props)
+          this.state = { text: '子组件old' }
+        }
+        // componentWillMount() {
+        //   console.log('[挂载2]挂载的时候调用一次 [componentWillMount]')
+        // }
+        static getDerivedStateFromProps(props, state) {
+          console.log('props', props)
+          console.log('state', state)
+          console.log('getDerivedStateFromProps 方法执行')
+          return {
+            fatherText: props.text
+          }
+        }
+
+        componentDidMount() {
+          console.log('componentDidMount 执行')
+        }
+
+        shouldComponentUpdate(pr) {
+          console.log('shouldComponentUpdate 更新')
+          return true
+        }
+        getSnapshotBeforeUpdate() {
+          console.log('getSnapshotBeforeUpdate执行')
+          return 'hah'
+        }
+        componentDidUpdate(preProps, preState, val) {
+          console.log('componentDidUpdate 执行')
+          console.log('从getSnapshotBeforeUpdate获取到的值', val)
+        }
+        changeText = () => {
+          this.setState({
+            text: '子组件new'
+          })
+        }
+        render() {
+          console.log('render方法执行')
+          return (
+            <div className="con">
+              <button onClick={this.changeText}>修改子组件文本</button>
+              <p className="">{this.state.text}</p>
+              <p>{this.props.text}</p>
+            </div>
+          )
+        }
+      }
+      class LifeCycleBox extends React.Component {
+        state = {
+          text: '父组件old',
+          hideChild: false
+        }
+        changeText = () => {
+          this.setState({
+            text: '父组件new'
+          })
+        }
+        hideChild = () => {
+          this.setState({
+            hideChild: true
+          })
+        }
+        render() {
+          return (
+            <div>
+              <button onClick={this.changeText}>修改父组件的文本</button>
+              <button onClick={this.hideChild}>隐藏子组件</button>
+
+              {this.state.hideChild ? null : (
+                <LifeCycle text={this.state.text} />
+              )}
+            </div>
+          )
+        }
+      }
+      ReactDOM.render(<LifeCycleBox />, document.getElementById('root'))
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+- 父组件更新触发 componentWillReceiveProps

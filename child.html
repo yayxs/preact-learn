@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      // function Child(props) {
+      //   return (
+      //     <div className="child">
+      //       <p>子组件接收到父组件的文本内容:{props.fatherText}</p>
+      //     </div>
+      //   )
+      // }
+      class C extends React.Component {
+        state = {
+          text: '子组件old'
+        }
+        changeText = () => {
+          this.props.changeFText(this.state.text)
+        }
+        render() {
+          return (
+            <div className="chid">
+              <button onClick={this.changeText}>点击更新父组件</button>
+            </div>
+          )
+        }
+      }
+      class P extends React.Component {
+        state = {
+          text: '父组件old'
+        }
+        changeText = () => {
+          this.setState({
+            text: '父组件new'
+          })
+        }
+        render() {
+          return (
+            <div className="">
+              <button onClick={this.changeText}>
+                点击修改父组件传入子组件的文本
+              </button>
+              <Child fatherText={this.state.text} />
+            </div>
+          )
+        }
+      }
+      ReactDOM.render(<P />, document.getElementById('app'))
+    </script>
+  </body>
+</html>

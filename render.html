@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      class ParentComp extends React.Component {
+        state = {
+          text: '父组件old',
+          hideChild: false,
+          ownParet: '仅仅父组件old'
+        }
+        changeText = () => {
+          this.setState({
+            text: '父组件new'
+          })
+        }
+        changeOwnTxt = () => {
+          this.setState({
+            ownParet: '仅仅父组件new'
+          })
+        }
+        hideChild = () => {
+          this.setState({
+            hideChild: true
+          })
+        }
+        render() {
+          return (
+            <div className="parent-con">
+              <button onClick={this.changeOwnTxt}>修改父组件自有的内容</button>
+              <button onClick={this.changeText} className="changeTxt">
+                修改父组件的文本
+              </button>
+              <button onClick={this.hideChild} className="hide-child">
+                隐藏子组件
+              </button>
+              {this.state.hideChild ? null : <LifeC text={this.state.text} />}
+            </div>
+          )
+        }
+      }
+
+      class LifeC extends React.Component {
+        constructor(props) {
+          console.log('[挂载1]挂载的时候调用一次 [constructor]')
+          super(props)
+          this.state = { text: '子组件old' }
+        }
+        componentWillMount() {
+          console.log('[挂载2]挂载的时候调用一次 [componentWillMount]')
+        }
+        render() {
+          console.log('[挂载3]需要渲染的内容返回出来 [render]')
+          return (
+            <>
+              <div className="cont">
+                <button onClick={this.changeText}>修改子组件文本</button>
+              </div>
+              <p>子组件state：{this.state.text}</p>
+              <p>父组件props：{this.props.text}</p>
+            </>
+          )
+        }
+        componentDidMount() {
+          console.log('[挂载4]挂载的时候调用一次 [componentDidMount]')
+        }
+        componentWillReceiveProps(nextProps) {
+          console.log('componentWillReceiveProps执行')
+        }
+        shouldComponentUpdate() {
+          console.log('[更新1] [shouldComponentUpdate]')
+          return true
+        }
+        componentWillUpdate() {
+          console.log('[更新2] 组件将要更新 [componentWillUpdate]')
+        }
+        componentWillUnmount() {
+          console.log('子组件卸载的方法执行')
+        }
+        componentDidUpdate() {
+          console.log('[更新3] 组件已经更新了了 [componentDidUpdate]')
+        }
+        changeText = () => {
+          this.setState({
+            text: '子组件new'
+          })
+        }
+      }
+      const app = document.getElementById('root')
+
+      ReactDOM.render(<ParentComp />, app)
+    </script>
+  </body>
+</html>

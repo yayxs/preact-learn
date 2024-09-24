@@ -3,16 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>使用htm</title>
   </head>
   <body>
     <script type="module">
       import { h, Component, render } from 'https://esm.sh/preact'
+      import htm from 'https://esm.sh/htm'
 
-      // Create your app
-      const app = h('h1', null, 'Hello World!')
+      // 为 Preact 初始化 htm
+      const html = htm.bind(h)
 
-      render(app, document.body)
+      function App(props) {
+        return html`<h1>Hello ${props.name}!</h1>`
+      }
+
+      render(html`<${App} name="World" />`, document.body)
     </script>
   </body>
 </html>
